@@ -10,7 +10,10 @@ public class TicTacToe {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        displayBoard(initialisingBoard());
+        chooseLetter(scanner);
+        char[] boardCells = initialisingBoard();
+        displayBoard(boardCells);
+        makeMoveToDesireCell(scanner, boardCells);
     }
 
     public static char[] initialisingBoard() {
@@ -35,9 +38,25 @@ public class TicTacToe {
         }
     }
 
-    public static void displayBoard(char[] BoardCells) {
-        System.out.println(BoardCells[1] + "|" + BoardCells[2] + "|" + BoardCells[3]
-                + "\n" + BoardCells[4] + "|" + BoardCells[5] + "|" + BoardCells[6]
-                + "\n" + BoardCells[7] + "|" + BoardCells[8] + "|" + BoardCells[9]);
+    public static void displayBoard(char[] boardCells) {
+        System.out.println(boardCells[1] + "|" + boardCells[2] + "|" + boardCells[3]
+                + "\n" + boardCells[4] + "|" + boardCells[5] + "|" + boardCells[6]
+                + "\n" + boardCells[7] + "|" + boardCells[8] + "|" + boardCells[9]);
+    }
+
+    public static boolean isCellAvailable(char[] boardCells, int index) {
+        return boardCells[index] == '-';
+    }
+
+    public static void makeMoveToDesireCell(Scanner scanner, char[] boardCells) {
+        System.out.println("Player's Turn : ");
+        int movePlayer = scanner.nextInt();
+
+        if (movePlayer == 0 || movePlayer > 10)
+            System.out.println("INVALID INPUT!!!");
+        else if (isCellAvailable(boardCells, movePlayer))
+            boardCells[movePlayer] = playerChoice;
+        else
+            System.out.println("Position is taken");
     }
 }
