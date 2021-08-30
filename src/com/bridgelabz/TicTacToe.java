@@ -49,14 +49,18 @@ public class TicTacToe {
     }
 
     public static void makeMoveToDesireCell(Scanner scanner, char[] boardCells) {
-        System.out.println("Player's Turn : ");
-        int movePlayer = scanner.nextInt();
+        while (true) {
+            System.out.println("Player's Turn : ");
+            int movePlayer = scanner.nextInt();
 
-        if (movePlayer == 0 || movePlayer > 10)
-            System.out.println("INVALID INPUT!!!");
-        else if (isCellAvailable(boardCells, movePlayer))
-            boardCells[movePlayer] = playerChoice;
-        else
-            System.out.println("Position is taken");
+            if (movePlayer == 0 || movePlayer > 10)
+                System.out.println("INVALID INPUT!!!");
+            else if (isCellAvailable(boardCells, movePlayer))
+                boardCells[movePlayer] = playerChoice;
+            else
+                System.out.println("Position is taken");
+
+            displayBoard(boardCells);
+        }
     }
 }
