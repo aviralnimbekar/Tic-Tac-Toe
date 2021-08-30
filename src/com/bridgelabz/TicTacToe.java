@@ -4,13 +4,18 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class TicTacToe {
-    public static char playerChoice;
-    public static char computerChoice;
+    public static char playerChoice, computerChoice;
+    public static final int WIN = 1, LOSE = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        chooseLetter(scanner);
+        int toss = makeToss(scanner);
+        if (toss == WIN)
+            chooseLetter(scanner);
+        else
+            computerChoice = 'X';
+
         char[] boardCells = initialisingBoard();
         displayBoard(boardCells);
         makeMoveToDesireCell(scanner, boardCells);
@@ -62,5 +67,18 @@ public class TicTacToe {
 
             displayBoard(boardCells);
         }
+    }
+
+    public static int makeToss(Scanner scanner) {
+        System.out.println("To make a Toss type H or T");
+        String tossMade = scanner.next();
+        int random = (int) (Math.random() * 2);
+
+        if (WIN == random) {
+            System.out.println("WON");
+            return WIN;
+        } else
+            System.out.println("LOST");
+        return LOSE;
     }
 }
