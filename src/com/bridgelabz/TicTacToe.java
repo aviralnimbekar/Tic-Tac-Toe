@@ -60,9 +60,11 @@ public class TicTacToe {
 
             if (movePlayer == 0 || movePlayer > 10)
                 System.out.println("INVALID INPUT!!!");
-            else if (isCellAvailable(boardCells, movePlayer))
+            else if (isCellAvailable(boardCells, movePlayer)) {
                 boardCells[movePlayer] = playerChoice;
-            else
+                if (gameStatus(boardCells))
+                    break;
+            } else
                 System.out.println("Position is taken");
 
             displayBoard(boardCells);
@@ -80,5 +82,60 @@ public class TicTacToe {
         } else
             System.out.println("LOST");
         return LOSE;
+    }
+
+    public static boolean gameStatus(char[] boardCells) {
+        return winningCondition(boardCells) || tieCondition(boardCells);
+    }
+
+    private static boolean winningCondition(char[] boardCells) {
+        if (boardCells[1] != '-' && boardCells[1] == boardCells[2] && boardCells[2] == boardCells[3]) {
+            System.out.println("R1 Won the game");
+            return true;
+        }
+
+        if (boardCells[4] != '-' && boardCells[4] == boardCells[5] && boardCells[5] == boardCells[6]) {
+            System.out.println("R2 Won the game");
+            return true;
+        }
+
+        if (boardCells[7] != '-' && boardCells[7] == boardCells[8] && boardCells[8] == boardCells[9]) {
+            System.out.println("R3 Won the game");
+            return true;
+        }
+
+        if (boardCells[1] != '-' && boardCells[1] == boardCells[4] && boardCells[4] == boardCells[7]) {
+            System.out.println("C1 Won the game");
+            return true;
+        }
+
+        if (boardCells[2] != '-' && boardCells[2] == boardCells[5] && boardCells[5] == boardCells[8]) {
+            System.out.println("C2 Won the game");
+            return true;
+        }
+
+        if (boardCells[3] != '-' && boardCells[3] == boardCells[6] && boardCells[6] == boardCells[9]) {
+            System.out.println("C3 Won the game");
+            return true;
+        }
+
+        if (boardCells[1] != '-' && boardCells[1] == boardCells[5] && boardCells[5] == boardCells[9]) {
+            System.out.println("D1 Won the game");
+            return true;
+        }
+
+        if (boardCells[7] != '-' && boardCells[7] == boardCells[5] && boardCells[5] == boardCells[3]) {
+            System.out.println("D2 Won the game");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean tieCondition(char[] boardCells) {
+        for (int i = 1; i < 10; i++) {
+            if (boardCells[i] == 'X' || boardCells[i] == 'O')
+                return true;
+        }
+        return false;
     }
 }
