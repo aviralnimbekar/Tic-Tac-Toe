@@ -293,4 +293,18 @@ public class TicTacToe {
                 boardCells[7] == playerChoice && boardCells[8] == playerChoice)
             boardCells[9] = computerChoice;
     }
+
+    public static void noOneWinning(char[] boardCells) {
+        if (boardCells[1] == '-')
+           computerChoice = boardCells[1];
+
+        if (boardCells[3] == '-')
+            computerChoice = boardCells[3];
+
+        if (boardCells[7] == '-')
+            computerChoice = boardCells[7];
+
+        if (boardCells[9] == '-')
+            computerChoice = boardCells[9];
+    }
 }
