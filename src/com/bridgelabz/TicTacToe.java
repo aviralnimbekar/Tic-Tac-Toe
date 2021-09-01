@@ -306,5 +306,20 @@ public class TicTacToe {
 
         if (boardCells[9] == '-')
             computerChoice = boardCells[9];
+
+        if (boardCells[5] == '-')
+            computerChoice = boardCells[5];
+
+        if (boardCells[2] == '-')
+            computerChoice = boardCells[2];
+
+        if (boardCells[4] == '-')
+            computerChoice = boardCells[4];
+
+        if (boardCells[6] == '-')
+            computerChoice = boardCells[6];
+
+        if (boardCells[8] == '-')
+            computerChoice = boardCells[8];
     }
 }
