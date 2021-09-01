@@ -11,7 +11,6 @@ public class TicTacToe {
         System.out.println("Welcome to Tic Tac Toe");
 
         Scanner scanner = new Scanner(System.in);
-        char[] boardCells = initialisingBoard();
 
         boolean playAgain = true;
         while (playAgain) {
@@ -19,6 +18,7 @@ public class TicTacToe {
             String play = scanner.nextLine().toUpperCase(Locale.ROOT);
             switch (play) {
                 case "Y":
+                    char[] boardCells = initialisingBoard();
                     int toss = makeToss(scanner);
                     displayBoard(boardCells);
                     if (toss == WIN) {
@@ -71,7 +71,7 @@ public class TicTacToe {
     public static void playersTurn(Scanner scanner, char[] boardCells) {
         while (true) {
             while (true) {
-                System.out.println("Player's Turn : ");
+                System.out.println("Player's Turn (1-9): ");
                 int movePlayer = scanner.nextInt();
 
                 if (movePlayer == 0 || movePlayer > 10)
@@ -88,17 +88,54 @@ public class TicTacToe {
                 break;
 
             System.out.println("Computer's Turn : ");
-            while (true) {
-                int moveComputer = (int) (Math.random() * 9) + 1;
 
-                if (isCellAvailable(boardCells, moveComputer)) {
-                    boardCells[moveComputer] = computerChoice;
+            while (true) {
+                if (computerPlayToWin(boardCells))
+                    break;
+                else if (computerPlayToBlock(boardCells))
+                    break;
+                else if (noOneWinning(boardCells)) {
                     break;
                 }
+            }
+            displayBoard(boardCells);
+            if (gameStatus(boardCells, computerChoice))
+                break;
+        }
+    }
+
+    public static void computersTurn(Scanner scanner, char[] boardCells) {
+        while (true) {
+            System.out.println("Computer's Turn : ");
+            while (true) {
+                if (computerPlayToWin(boardCells))
+                    break;
+                else if (computerPlayToBlock(boardCells))
+                    break;
+                else if (noOneWinning(boardCells))
+                    break;
             }
 
             displayBoard(boardCells);
             if (gameStatus(boardCells, computerChoice))
+                break;
+
+            while (true) {
+                System.out.println("Player's Turn (1-9): ");
+                int movePlayer = scanner.nextInt();
+
+                if (movePlayer == 0 || movePlayer > 10)
+                    System.out.println("INVALID INPUT!!!");
+
+                else if (isCellAvailable(boardCells, movePlayer)) {
+                    boardCells[movePlayer] = playerChoice;
+                    break;
+
+                } else
+                    System.out.println("Position is taken");
+            }
+            displayBoard(boardCells);
+            if (gameStatus(boardCells, playerChoice))
                 break;
         }
     }
@@ -109,217 +146,243 @@ public class TicTacToe {
         int random = (int) (Math.random() * 2);
 
         if (WIN == random) {
-            System.out.println("WON");
+            System.out.println("YOU WON THE TOSS");
             return WIN;
         } else
-            System.out.println("LOST");
+            System.out.println("YOU LOST THE TOSS");
         return LOSE;
     }
 
     public static boolean gameStatus(char[] boardCells, char currentPlayer) {
-        return winningCondition(boardCells, currentPlayer);
+        return winningCondition(boardCells, currentPlayer) || tieCondition(boardCells);
     }
 
     private static boolean winningCondition(char[] boardCells, char currentPlayer) {
         if (boardCells[1] != '-' && boardCells[1] == boardCells[2] && boardCells[2] == boardCells[3]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[4] != '-' && boardCells[4] == boardCells[5] && boardCells[5] == boardCells[6]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[7] != '-' && boardCells[7] == boardCells[8] && boardCells[8] == boardCells[9]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[1] != '-' && boardCells[1] == boardCells[4] && boardCells[4] == boardCells[7]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[2] != '-' && boardCells[2] == boardCells[5] && boardCells[5] == boardCells[8]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[3] != '-' && boardCells[3] == boardCells[6] && boardCells[6] == boardCells[9]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[1] != '-' && boardCells[1] == boardCells[5] && boardCells[5] == boardCells[9]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
 
         if (boardCells[7] != '-' && boardCells[7] == boardCells[5] && boardCells[5] == boardCells[3]) {
-            System.out.println(currentPlayer + " Won the game");
+            if (currentPlayer == playerChoice)
+                System.out.println("Player Won the game");
+            else
+                System.out.println("Player LOST the game");
             return true;
         }
         return false;
     }
 
     private static boolean tieCondition(char[] boardCells) {
+        int counter = 0;
         for (int i = 1; i < 10; i++) {
             if (boardCells[i] == 'X' || boardCells[i] == 'O')
-                return true;
+                counter++;
+        }
+        if (counter == 9)
+            System.out.println("**TIE**");
+        return counter == 9;
+    }
+
+    public static boolean computerPlayToWin(char[] boardCells) {
+        if (boardCells[1] == '-' && boardCells[2] == computerChoice && boardCells[3] == computerChoice ||
+                boardCells[1] == '-' && boardCells[4] == computerChoice && boardCells[7] == computerChoice ||
+                boardCells[1] == '-' && boardCells[5] == computerChoice && boardCells[9] == computerChoice) {
+            boardCells[1] = computerChoice;
+            return true;
+
+        } else if (boardCells[2] == '-' && boardCells[1] == computerChoice && boardCells[3] == computerChoice ||
+                boardCells[2] == '-' && boardCells[5] == computerChoice && boardCells[8] == computerChoice) {
+            boardCells[2] = computerChoice;
+            return true;
+
+        } else if (boardCells[3] == '-' && boardCells[1] == computerChoice && boardCells[2] == computerChoice ||
+                boardCells[3] == '-' && boardCells[6] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[3] == '-' && boardCells[5] == computerChoice && boardCells[7] == computerChoice) {
+            boardCells[3] = computerChoice;
+            return true;
+
+        } else if (boardCells[4] == '-' && boardCells[1] == computerChoice && boardCells[7] == computerChoice ||
+                boardCells[4] == '-' && boardCells[5] == computerChoice && boardCells[6] == computerChoice) {
+            boardCells[4] = computerChoice;
+            return true;
+
+        } else if (boardCells[5] == '-' && boardCells[1] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[5] == '-' && boardCells[2] == computerChoice && boardCells[8] == computerChoice ||
+                boardCells[5] == '-' && boardCells[3] == computerChoice && boardCells[7] == computerChoice ||
+                boardCells[5] == '-' && boardCells[4] == computerChoice && boardCells[6] == computerChoice) {
+            boardCells[5] = computerChoice;
+            return true;
+
+        } else if (boardCells[6] == '-' && boardCells[3] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[6] == '-' && boardCells[4] == computerChoice && boardCells[5] == computerChoice) {
+            boardCells[6] = computerChoice;
+            return true;
+
+        } else if (boardCells[7] == '-' && boardCells[1] == computerChoice && boardCells[4] == computerChoice ||
+                boardCells[7] == '-' && boardCells[8] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[7] == '-' && boardCells[5] == computerChoice && boardCells[3] == computerChoice) {
+            boardCells[7] = computerChoice;
+            return true;
+
+        } else if (boardCells[8] == '-' && boardCells[2] == computerChoice && boardCells[5] == computerChoice ||
+                boardCells[8] == '-' && boardCells[7] == computerChoice && boardCells[9] == computerChoice) {
+            boardCells[8] = computerChoice;
+            return true;
+
+        } else if (boardCells[9] == '-' && boardCells[1] == computerChoice && boardCells[5] == computerChoice ||
+                boardCells[9] == '-' && boardCells[3] == computerChoice && boardCells[6] == computerChoice ||
+                boardCells[9] == '-' && boardCells[7] == computerChoice && boardCells[8] == computerChoice) {
+            boardCells[9] = computerChoice;
+            return true;
         }
         return false;
     }
 
-    public static void computersTurn(Scanner scanner, char[] boardCells) {
-        while (true) {
-            System.out.println("Computer's Turn : ");
-            while (true) {
-                int moveComputer = (int) (Math.random() * 9) + 1;
+    public static boolean computerPlayToBlock(char[] boardCells) {
+        if (boardCells[1] == '-' && boardCells[2] == playerChoice && boardCells[3] == playerChoice ||
+                boardCells[1] == '-' && boardCells[4] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[1] == '-' && boardCells[5] == playerChoice && boardCells[9] == playerChoice) {
+            boardCells[1] = computerChoice;
+            return true;
 
-                if (isCellAvailable(boardCells, moveComputer)) {
-                    boardCells[moveComputer] = computerChoice;
-                    break;
-                }
-            }
-            displayBoard(boardCells);
-            if (gameStatus(boardCells, computerChoice))
-                break;
+        } else if (boardCells[2] == '-' && boardCells[1] == playerChoice && boardCells[3] == playerChoice ||
+                boardCells[2] == '-' && boardCells[5] == playerChoice && boardCells[8] == playerChoice) {
+            boardCells[2] = computerChoice;
+            return true;
 
-            while (true) {
-                System.out.println("Player's Turn : ");
-                int movePlayer = scanner.nextInt();
+        } else if (boardCells[3] == '-' && boardCells[1] == playerChoice && boardCells[2] == playerChoice ||
+                boardCells[3] == '-' && boardCells[6] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[3] == '-' && boardCells[7] == playerChoice && boardCells[5] == playerChoice) {
+            boardCells[3] = computerChoice;
+            return true;
 
-                if (movePlayer == 0 || movePlayer > 10)
-                    System.out.println("INVALID INPUT!!!");
+        } else if (boardCells[4] == '-' && boardCells[1] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[4] == '-' && boardCells[5] == playerChoice && boardCells[6] == playerChoice) {
+            boardCells[4] = computerChoice;
+            return true;
 
-                else if (isCellAvailable(boardCells, movePlayer)) {
-                    boardCells[movePlayer] = playerChoice;
-                    break;
+        } else if (boardCells[5] == '-' && boardCells[1] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[5] == '-' && boardCells[2] == playerChoice && boardCells[8] == playerChoice ||
+                boardCells[5] == '-' && boardCells[3] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[5] == '-' && boardCells[4] == playerChoice && boardCells[6] == playerChoice) {
+            boardCells[5] = computerChoice;
+            return true;
 
-                } else
-                    System.out.println("Position is taken");
-            }
-            displayBoard(boardCells);
-            if (gameStatus(boardCells, playerChoice))
-                break;
+        } else if (boardCells[6] == '-' && boardCells[3] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[6] == '-' && boardCells[4] == playerChoice && boardCells[5] == playerChoice) {
+            boardCells[6] = computerChoice;
+            return true;
+
+        } else if (boardCells[7] == '-' && boardCells[1] == playerChoice && boardCells[4] == playerChoice ||
+                boardCells[7] == '-' && boardCells[8] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[7] == '-' && boardCells[5] == playerChoice && boardCells[3] == playerChoice) {
+            boardCells[7] = computerChoice;
+            return true;
+
+        } else if (boardCells[8] == '-' && boardCells[2] == playerChoice && boardCells[5] == playerChoice ||
+                boardCells[8] == '-' && boardCells[7] == playerChoice && boardCells[9] == playerChoice) {
+            boardCells[8] = computerChoice;
+            return true;
+
+        } else if (boardCells[9] == '-' && boardCells[1] == playerChoice && boardCells[5] == playerChoice ||
+                boardCells[9] == '-' && boardCells[3] == playerChoice && boardCells[6] == playerChoice ||
+                boardCells[9] == '-' && boardCells[7] == playerChoice && boardCells[8] == playerChoice) {
+            boardCells[9] = computerChoice;
+            return true;
         }
+        return false;
     }
 
-    public static void computerPlayToWin(char[] boardCells) {
-        if (boardCells[2] == computerChoice && boardCells[3] == computerChoice ||
-                boardCells[4] == computerChoice && boardCells[7] == computerChoice
-                || boardCells[5] == computerChoice && boardCells[9] == computerChoice)
+    public static boolean noOneWinning(char[] boardCells) {
+        if (boardCells[1] == '-') {
             boardCells[1] = computerChoice;
+            return true;
 
-        if (boardCells[1] == computerChoice && boardCells[3] == computerChoice ||
-                boardCells[5] == computerChoice && boardCells[8] == computerChoice)
-            boardCells[2] = computerChoice;
-
-        if (boardCells[1] == computerChoice && boardCells[2] == computerChoice ||
-                boardCells[6] == computerChoice && boardCells[9] == computerChoice ||
-                boardCells[5] == computerChoice && boardCells[7] == computerChoice)
+        } else if (boardCells[3] == '-') {
             boardCells[3] = computerChoice;
+            return true;
 
-        if (boardCells[1] == computerChoice && boardCells[7] == computerChoice ||
-                boardCells[5] == computerChoice && boardCells[6] == computerChoice)
-            boardCells[4] = computerChoice;
-
-        if (boardCells[1] == computerChoice && boardCells[9] == computerChoice ||
-                boardCells[2] == computerChoice && boardCells[8] == computerChoice ||
-                boardCells[3] == computerChoice && boardCells[7] == computerChoice ||
-                boardCells[4] == computerChoice && boardCells[6] == computerChoice)
-            boardCells[5] = computerChoice;
-
-        if (boardCells[3] == computerChoice && boardCells[9] == computerChoice ||
-                boardCells[4] == computerChoice && boardCells[5] == computerChoice)
-            boardCells[6] = computerChoice;
-
-        if (boardCells[1] == computerChoice && boardCells[4] == computerChoice ||
-                boardCells[8] == computerChoice && boardCells[9] == computerChoice ||
-                boardCells[5] == computerChoice && boardCells[3] == computerChoice)
+        } else if (boardCells[7] == '-') {
             boardCells[7] = computerChoice;
+            return true;
 
-        if (boardCells[2] == computerChoice && boardCells[5] == computerChoice ||
-                boardCells[7] == computerChoice && boardCells[9] == computerChoice)
-            boardCells[8] = computerChoice;
-
-        if (boardCells[1] == computerChoice && boardCells[5] == computerChoice ||
-                boardCells[3] == computerChoice && boardCells[6] == computerChoice ||
-                boardCells[7] == computerChoice && boardCells[8] == computerChoice)
+        } else if (boardCells[9] == '-') {
             boardCells[9] = computerChoice;
-    }
+            return true;
 
-    public static void computerPlayToBlock(char[] boardCells) {
-        if (boardCells[2] == playerChoice && boardCells[3] == playerChoice ||
-                boardCells[4] == playerChoice && boardCells[7] == playerChoice ||
-                boardCells[5] == playerChoice && boardCells[8] == playerChoice)
-            boardCells[1] = computerChoice;
+        } else if (boardCells[5] == '-') {
+            boardCells[5] = computerChoice;
+            return true;
 
-        if (boardCells[1] == playerChoice && boardCells[3] == playerChoice ||
-                boardCells[5] == playerChoice && boardCells[8] == playerChoice)
+        } else if (boardCells[2] == '-') {
             boardCells[2] = computerChoice;
+            return true;
 
-        if (boardCells[1] == playerChoice && boardCells[2] == playerChoice ||
-                boardCells[6] == playerChoice && boardCells[9] == playerChoice ||
-                boardCells[7] == playerChoice && boardCells[5] == playerChoice)
-            boardCells[3] = computerChoice;
-
-        if (boardCells[1] == playerChoice && boardCells[7] == playerChoice ||
-                boardCells[5] == playerChoice && boardCells[6] == playerChoice)
+        } else if (boardCells[4] == '-') {
             boardCells[4] = computerChoice;
+            return true;
 
-        if (boardCells[1] == playerChoice && boardCells[9] == playerChoice ||
-                boardCells[2] == playerChoice && boardCells[8] == playerChoice ||
-                boardCells[3] == playerChoice && boardCells[7] == playerChoice ||
-                boardCells[4] == playerChoice && boardCells[6] == playerChoice)
-            boardCells[5] = computerChoice;
-
-        if (boardCells[3] == playerChoice && boardCells[9] == playerChoice ||
-                boardCells[4] == playerChoice && boardCells[5] == playerChoice)
+        } else if (boardCells[6] == '-') {
             boardCells[6] = computerChoice;
+            return true;
 
-        if (boardCells[1] == playerChoice && boardCells[4] == playerChoice ||
-                boardCells[8] == playerChoice && boardCells[9] == playerChoice ||
-                boardCells[5] == playerChoice && boardCells[3] == playerChoice)
-            boardCells[7] = computerChoice;
-
-        if (boardCells[2] == playerChoice && boardCells[5] == playerChoice ||
-                boardCells[7] == playerChoice && boardCells[9] == playerChoice)
+        } else if (boardCells[8] == '-') {
             boardCells[8] = computerChoice;
+            return true;
+        }
 
-        if (boardCells[1] == playerChoice && boardCells[5] == playerChoice ||
-                boardCells[3] == playerChoice && boardCells[6] == playerChoice ||
-                boardCells[7] == playerChoice && boardCells[8] == playerChoice)
-            boardCells[9] = computerChoice;
-    }
-
-    public static void noOneWinning(char[] boardCells) {
-        if (boardCells[1] == '-')
-           computerChoice = boardCells[1];
-
-        if (boardCells[3] == '-')
-            computerChoice = boardCells[3];
-
-        if (boardCells[7] == '-')
-            computerChoice = boardCells[7];
-
-        if (boardCells[9] == '-')
-            computerChoice = boardCells[9];
-
-        if (boardCells[5] == '-')
-            computerChoice = boardCells[5];
-
-        if (boardCells[2] == '-')
-            computerChoice = boardCells[2];
-
-        if (boardCells[4] == '-')
-            computerChoice = boardCells[4];
-
-        if (boardCells[6] == '-')
-            computerChoice = boardCells[6];
-
-        if (boardCells[8] == '-')
-            computerChoice = boardCells[8];
+        return false;
     }
 }
