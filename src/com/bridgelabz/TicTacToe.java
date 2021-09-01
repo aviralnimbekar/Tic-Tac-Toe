@@ -249,4 +249,48 @@ public class TicTacToe {
                 boardCells[7] == computerChoice && boardCells[8] == computerChoice)
             boardCells[9] = computerChoice;
     }
+
+    public static void computerPlayToBlock(char[] boardCells) {
+        if (boardCells[2] == playerChoice && boardCells[3] == playerChoice ||
+                boardCells[4] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[5] == playerChoice && boardCells[8] == playerChoice)
+            boardCells[1] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[3] == playerChoice ||
+                boardCells[5] == playerChoice && boardCells[8] == playerChoice)
+            boardCells[2] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[2] == playerChoice ||
+                boardCells[6] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[7] == playerChoice && boardCells[5] == playerChoice)
+            boardCells[3] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[5] == playerChoice && boardCells[6] == playerChoice)
+            boardCells[4] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[2] == playerChoice && boardCells[8] == playerChoice ||
+                boardCells[3] == playerChoice && boardCells[7] == playerChoice ||
+                boardCells[4] == playerChoice && boardCells[6] == playerChoice)
+            boardCells[5] = computerChoice;
+
+        if (boardCells[3] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[4] == playerChoice && boardCells[5] == playerChoice)
+            boardCells[6] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[4] == playerChoice ||
+                boardCells[8] == playerChoice && boardCells[9] == playerChoice ||
+                boardCells[5] == playerChoice && boardCells[3] == playerChoice)
+            boardCells[7] = computerChoice;
+
+        if (boardCells[2] == playerChoice && boardCells[5] == playerChoice ||
+                boardCells[7] == playerChoice && boardCells[9] == playerChoice)
+            boardCells[8] = computerChoice;
+
+        if (boardCells[1] == playerChoice && boardCells[5] == playerChoice ||
+                boardCells[3] == playerChoice && boardCells[6] == playerChoice ||
+                boardCells[7] == playerChoice && boardCells[8] == playerChoice)
+            boardCells[9] = computerChoice;
+    }
 }
