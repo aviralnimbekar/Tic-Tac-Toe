@@ -8,17 +8,32 @@ public class TicTacToe {
     public static final int WIN = 1, LOSE = 0;
 
     public static void main(String[] args) {
+        System.out.println("Welcome to Tic Tac Toe");
+
         Scanner scanner = new Scanner(System.in);
-
-        int toss = makeToss(scanner);
-        if (toss == WIN)
-            chooseLetter(scanner);
-        else
-            computerChoice = 'X';
-
         char[] boardCells = initialisingBoard();
-        displayBoard(boardCells);
-        makeMoveToDesireCell(scanner, boardCells);
+
+        boolean playAgain = true;
+        while (playAgain) {
+            System.out.println("Do you want to play Tic Tac Toe (Y/N)");
+            String play = scanner.nextLine().toUpperCase(Locale.ROOT);
+            switch (play) {
+                case "Y":
+                    int toss = makeToss(scanner);
+                    displayBoard(boardCells);
+                    if (toss == WIN) {
+                        chooseLetter(scanner);
+                        playersTurn(scanner, boardCells);
+                    } else {
+                        computerChoice = 'X';
+                        computersTurn(scanner, boardCells);
+                    }
+                    break;
+                case "N":
+                    playAgain = false;
+                    break;
+            }
+        }
     }
 
     public static char[] initialisingBoard() {
@@ -53,21 +68,38 @@ public class TicTacToe {
         return boardCells[index] == '-';
     }
 
-    public static void makeMoveToDesireCell(Scanner scanner, char[] boardCells) {
+    public static void playersTurn(Scanner scanner, char[] boardCells) {
         while (true) {
-            System.out.println("Player's Turn : ");
-            int movePlayer = scanner.nextInt();
+            while (true) {
+                System.out.println("Player's Turn : ");
+                int movePlayer = scanner.nextInt();
 
-            if (movePlayer == 0 || movePlayer > 10)
-                System.out.println("INVALID INPUT!!!");
-            else if (isCellAvailable(boardCells, movePlayer)) {
-                boardCells[movePlayer] = playerChoice;
-                if (gameStatus(boardCells))
+                if (movePlayer == 0 || movePlayer > 10)
+                    System.out.println("INVALID INPUT!!!");
+                else if (isCellAvailable(boardCells, movePlayer)) {
+                    boardCells[movePlayer] = playerChoice;
                     break;
-            } else
-                System.out.println("Position is taken");
+
+                } else
+                    System.out.println("Position is taken");
+            }
+            displayBoard(boardCells);
+            if (gameStatus(boardCells, playerChoice))
+                break;
+
+            System.out.println("Computer's Turn : ");
+            while (true) {
+                int moveComputer = (int) (Math.random() * 9) + 1;
+
+                if (isCellAvailable(boardCells, moveComputer)) {
+                    boardCells[moveComputer] = computerChoice;
+                    break;
+                }
+            }
 
             displayBoard(boardCells);
+            if (gameStatus(boardCells, computerChoice))
+                break;
         }
     }
 
@@ -84,48 +116,48 @@ public class TicTacToe {
         return LOSE;
     }
 
-    public static boolean gameStatus(char[] boardCells) {
-        return winningCondition(boardCells) || tieCondition(boardCells);
+    public static boolean gameStatus(char[] boardCells, char currentPlayer) {
+        return winningCondition(boardCells, currentPlayer);
     }
 
-    private static boolean winningCondition(char[] boardCells) {
+    private static boolean winningCondition(char[] boardCells, char currentPlayer) {
         if (boardCells[1] != '-' && boardCells[1] == boardCells[2] && boardCells[2] == boardCells[3]) {
-            System.out.println("R1 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[4] != '-' && boardCells[4] == boardCells[5] && boardCells[5] == boardCells[6]) {
-            System.out.println("R2 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[7] != '-' && boardCells[7] == boardCells[8] && boardCells[8] == boardCells[9]) {
-            System.out.println("R3 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[1] != '-' && boardCells[1] == boardCells[4] && boardCells[4] == boardCells[7]) {
-            System.out.println("C1 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[2] != '-' && boardCells[2] == boardCells[5] && boardCells[5] == boardCells[8]) {
-            System.out.println("C2 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[3] != '-' && boardCells[3] == boardCells[6] && boardCells[6] == boardCells[9]) {
-            System.out.println("C3 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[1] != '-' && boardCells[1] == boardCells[5] && boardCells[5] == boardCells[9]) {
-            System.out.println("D1 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
 
         if (boardCells[7] != '-' && boardCells[7] == boardCells[5] && boardCells[5] == boardCells[3]) {
-            System.out.println("D2 Won the game");
+            System.out.println(currentPlayer + " Won the game");
             return true;
         }
         return false;
@@ -137,5 +169,84 @@ public class TicTacToe {
                 return true;
         }
         return false;
+    }
+
+    public static void computersTurn(Scanner scanner, char[] boardCells) {
+        while (true) {
+            System.out.println("Computer's Turn : ");
+            while (true) {
+                int moveComputer = (int) (Math.random() * 9) + 1;
+
+                if (isCellAvailable(boardCells, moveComputer)) {
+                    boardCells[moveComputer] = computerChoice;
+                    break;
+                }
+            }
+            displayBoard(boardCells);
+            if (gameStatus(boardCells, computerChoice))
+                break;
+
+            while (true) {
+                System.out.println("Player's Turn : ");
+                int movePlayer = scanner.nextInt();
+
+                if (movePlayer == 0 || movePlayer > 10)
+                    System.out.println("INVALID INPUT!!!");
+
+                else if (isCellAvailable(boardCells, movePlayer)) {
+                    boardCells[movePlayer] = playerChoice;
+                    break;
+
+                } else
+                    System.out.println("Position is taken");
+            }
+            displayBoard(boardCells);
+            if (gameStatus(boardCells, playerChoice))
+                break;
+        }
+    }
+
+    public static void computerPlayToWin(char[] boardCells) {
+        if (boardCells[2] == computerChoice && boardCells[3] == computerChoice ||
+                boardCells[4] == computerChoice && boardCells[7] == computerChoice
+                || boardCells[5] == computerChoice && boardCells[9] == computerChoice)
+            boardCells[1] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[3] == computerChoice ||
+                boardCells[5] == computerChoice && boardCells[8] == computerChoice)
+            boardCells[2] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[2] == computerChoice ||
+                boardCells[6] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[5] == computerChoice && boardCells[7] == computerChoice)
+            boardCells[3] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[7] == computerChoice ||
+                boardCells[5] == computerChoice && boardCells[6] == computerChoice)
+            boardCells[4] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[2] == computerChoice && boardCells[8] == computerChoice ||
+                boardCells[3] == computerChoice && boardCells[7] == computerChoice ||
+                boardCells[4] == computerChoice && boardCells[6] == computerChoice)
+            boardCells[5] = computerChoice;
+
+        if (boardCells[3] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[4] == computerChoice && boardCells[5] == computerChoice)
+            boardCells[6] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[4] == computerChoice ||
+                boardCells[8] == computerChoice && boardCells[9] == computerChoice ||
+                boardCells[5] == computerChoice && boardCells[3] == computerChoice)
+            boardCells[7] = computerChoice;
+
+        if (boardCells[2] == computerChoice && boardCells[5] == computerChoice ||
+                boardCells[7] == computerChoice && boardCells[9] == computerChoice)
+            boardCells[8] = computerChoice;
+
+        if (boardCells[1] == computerChoice && boardCells[5] == computerChoice ||
+                boardCells[3] == computerChoice && boardCells[6] == computerChoice ||
+                boardCells[7] == computerChoice && boardCells[8] == computerChoice)
+            boardCells[9] = computerChoice;
     }
 }
