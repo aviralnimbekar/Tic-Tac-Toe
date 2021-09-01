@@ -15,7 +15,7 @@ public class TicTacToe {
         boolean playAgain = true;
         while (playAgain) {
             System.out.println("Do you want to play Tic Tac Toe (Y/N)");
-            String play = scanner.nextLine().toUpperCase(Locale.ROOT);
+            String play = scanner.next().toUpperCase(Locale.ROOT);
             switch (play) {
                 case "Y":
                     char[] boardCells = initialisingBoard();
